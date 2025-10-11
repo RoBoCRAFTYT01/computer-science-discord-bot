@@ -2,8 +2,9 @@
   "name": "main",
   "module": "src/index.ts",
   "type": "module",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "bun src/index.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
