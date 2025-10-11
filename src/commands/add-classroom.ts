@@ -28,7 +28,8 @@ async function addClassroom(interaction: ChatInputCommandInteraction) {
     const classroomId = interaction.options.getString("classroom_id", true);
     const selectedChannel = interaction.options.getChannel("channel", true);
 
-    if (selectedChannel.type !== ChannelType.GuildText) {
+    if (selectedChannel.type !== ChannelType.GuildText &&
+                        selectedChannel.type !== ChannelType.GuildAnnouncement) {
         await interaction.reply({
             content: "❌ Please select a **text channel**.",
             flags: MessageFlags.Ephemeral
