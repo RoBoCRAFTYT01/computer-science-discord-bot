@@ -4,22 +4,16 @@ export const AccessRules: AccessRuleMap = {
     CEO: {
         roles: {
             names: ["CEO", "Overlord"],
-            ids: [],
+            ids: ["1291056365594345553"],
         },
         perms: ["Administrator"]
     },
     admin: {
         roles: {
             names: ["Manager", "GuildManager"],
-            ids: ["1321791118047969310"],
+            ids: ["1291058592019120220", "1419762304748359942"],
         },
-        perms: [
-            "ManageGuild",
-            "ManageRoles",
-            "ManageChannels",
-            "BanMembers",
-            "KickMembers"
-        ]
+        perms: []
     },
     mod: {
         roles: {
