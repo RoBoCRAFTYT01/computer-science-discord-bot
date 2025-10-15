@@ -2,6 +2,7 @@ import {
     type Interaction,
     Events,
     MessageFlags,
+    TextChannel,
 } from "discord.js";
 import { FieldModel } from "@models/models";
 
@@ -21,7 +22,7 @@ export default {
             return;
         }
 
-        const doc = fieldDoc.data.find((d : any) => d._id === selectedId);
+        const doc = fieldDoc.data.find((d: any) => d._id === selectedId);
 
         if (!doc) {
             await interaction.editReply({
@@ -30,8 +31,17 @@ export default {
             return;
         }
 
+        const channel = await interaction.guild?.channels.fetch(doc.pdf.channel) as TextChannel;
+        if (!channel) throw new Error("Channel not found");
+
+        const message = await channel.messages.fetch(doc.pdf.message).catch(() => null);
+        if (!message) throw new Error("Message not found");
+
+        const attachment = message.attachments.first();
+        if(!attachment) throw new Error("Invalid attachment");
+
         await interaction.editReply({
-            content: `📥 **${doc.displayName}**\n[Click here to download or view](${doc.pdf})\n🧑‍💻 Added by **${doc.by}**.`,
+            content: `📥 **${doc.displayName}**\n[Click here to download or view](${attachment.url})\n🧑‍💻 Added by **${doc.by}**`,
         });
     }
 }

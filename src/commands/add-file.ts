@@ -5,6 +5,7 @@ import {
     MessageFlags,
 } from "discord.js";
 import { FieldModel } from "@models/models";
+import { channel } from "diagnostics_channel";
 
 export default {
     data: new SlashCommandBuilder()
@@ -45,6 +46,10 @@ export default {
             const file = interaction.options.getAttachment("file", true) as Attachment;
             const displayName = interaction.options.getString("display-name") || file.name;
 
+            const savedChannel = interaction.guild?.channels.cache.get(process.env.CHANNEL_ID || "");
+
+            if (!savedChannel || !savedChannel.isTextBased()) return;
+
             if (!file.contentType?.includes("pdf") && !file.contentType?.includes("document")) {
                 return interaction.reply({
                     content: "⚠️ Please upload a valid PDF or document file.",
@@ -61,13 +66,20 @@ export default {
                 });
             }
 
-            field.data.push({
-                displayName,
-                pdf: file.url,
-                by: interaction.user.tag,
-            });
+            savedChannel.send({
+                files: [file]
+            }).then(async (msg) => {
+                field.data.push({
+                    displayName,
+                    pdf: {
+                        channel: process.env.CHANNEL_ID || "",
+                        message: msg.id
+                    },
+                    by: interaction.user.tag,
+                });
 
-            await field.save();
+                await field.save();
+            });
 
             await interaction.reply({
                 content: `✅ **${displayName}** has been added under **${fieldName}**!`,

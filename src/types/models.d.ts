@@ -1,7 +1,10 @@
 interface PDFProps {
     _id: number;
     displayName: string;
-    pdf: string;
+    pdf: {
+        channel: string,
+        message: string
+    };
     by: string;
 }
 

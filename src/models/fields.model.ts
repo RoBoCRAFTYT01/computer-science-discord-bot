@@ -14,7 +14,16 @@ const FieldSchema = new Schema<FieldProps>({
         {
             _id: { type: Number, default: generateId },
             displayName: { type: String, required: true },
-            pdf: { type: String, required: true },
+            pdf: {
+                channel: {
+                    type: String,
+                    required: true
+                },
+                message: {
+                    type: String,
+                    required: true
+                },
+            },
             by: { type: String, required: true },
         },
     ],
